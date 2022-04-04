@@ -1,5 +1,8 @@
+import quopri
+from flower_shelf.requests import GetRequests, PostRequests
 
-class PageNotFound404():
+
+class PageNotFound404:
     '''
     Страница не найдена, 404.
     '''
@@ -8,7 +11,7 @@ class PageNotFound404():
         return '404 WHAT', '404 PAGE Not Found'
 
 
-class Flower_shelf():
+class Flower_shelf:
     '''
     Основной файл фреймворка
     '''
@@ -42,12 +45,25 @@ class Flower_shelf():
         if not url_path.endswith('/'):
             url_path = f'{url_path}/'
 
+
+        request = {}
+
+        method = environ['REQUEST_METHOD']
+        request['method'] = method
+
+        if method == 'POST':
+            data = PostRequests().get_request_params(environ)
+            request['data'] = data
+            print(data)
+        if method == 'GET':
+            request_params = GetRequests().get_request_params(environ)
+            request['request_params'] = request_params
+
+
         if url_path in self.routers_list:
             view = self.routers_list[url_path]
         else:
             view = PageNotFound404()
-
-        request = {}
 
         for front in self.fronts_list:
             front(request)
@@ -57,3 +73,14 @@ class Flower_shelf():
         return [body.encode('utf-8')]
 
 
+    @staticmethod
+    def decode_value(data):
+        '''
+
+        '''
+        new_data = {}
+        for key, value in data.items():
+            val = bytes(value.replace('%', '='), 'UTF-8')
+            val_decode_str = quopri.decodestring(val).decode('UTF-8')
+            new_data[key] = val_decode_str
+        return new_data

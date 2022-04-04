@@ -1,4 +1,4 @@
-from views import Index, Monitoring, Control, Logs
+from views import Index, Monitoring, Control, Logs, Contacts
 from flower_shelf.settings import MICROCONTROLLER
 
 
@@ -17,4 +17,5 @@ routers = {
     'monitoring/': Monitoring(),
     'control/': Control(),
     'logs/': Logs(),
+    'contacts/': Contacts(),
 }

@@ -37,3 +37,17 @@ class Logs:
     def __call__(self, request):
         date = datetime.datetime.now().strftime('%d %B %Y %H:%M:%S')
         return '200 OK', render('logs.html', date=date)
+
+
+class Contacts:
+    '''
+    Контроллер стрницы контактов.
+    '''
+
+    def __call__(self, request):
+        method =  request['method']
+        if method == 'GET':
+            print(method, request['request_params'])
+        elif method == "POST":
+            print(method, request['data'])
+        return '200 OK', render('contacts.html')
