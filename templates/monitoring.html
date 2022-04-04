@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <div>
+                <h1 class="display-5">Элементы</h1>
+            </div>
+            <div class="btn-group-vertical" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-primary">График температуры</button>
+                <button type="button" class="btn btn-primary">График влажности</button>
+                <button type="button" class="btn btn-primary">График полива</button>
+            </div>
+        </div>
+        <div class="col-9">
+            <div>
+                <h1 class="display-2">МОНИТОРИНГ</h1>
+            </div>
+
+            <br><br><br>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+
+                        <div id="chart">
+
+                            <script>
+ $(document).ready(function () {
+ $("#chart").shieldChart({
+ theme: "bootstrap",
+ primaryHeader: {
+ text: "Количество осадков относительно температуры"
+ },
+ seriesSettings: {
+ area: {
+ pointMark: {
+ enabled: true
+ }
+ }
+ },
+ axisX: {
+ categoricalValues: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
+ },
+ dataSeries: [{
+ seriesType: "area",
+ collectionAlias: "Ср. температура",
+ data: [48, 50, 55, 64, 73, 79, 82, 83, 80, 70, 61, 53]
+ }, {
+ seriesType: "area",
+ collectionAlias: "Ср. осадки",
+ data: [3.907, 7.943, 7.848, 9.284, 9.263, 9.819, 3.894, 8.287, 9.552, 6.855, 2.865, 1.341]
+ }],
+ events: {
+ legendSeriesClick: function (e) {
+ // остановить событие щелчка элемента серии, так что
+ // пользователь нажимает не переключить видимость серии
+ e.preventDefault();
+ }
+ }
+ });
+ });
+
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
