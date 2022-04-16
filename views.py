@@ -1,6 +1,6 @@
 import datetime
 
-from flower_shelf.templator import render
+from flower_shelf_framework.templator import render
 
 class Index():
     '''

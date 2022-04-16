@@ -1,4 +1,4 @@
-from flower_shelf.main import Flower_shelf
+from flower_shelf_framework.main import Flower_shelf
 from urls import routers, fronts
 from wsgiref.simple_server import make_server
 

@@ -1,5 +1,5 @@
 import quopri
-from flower_shelf.requests import GetRequests, PostRequests
+from flower_shelf_framework.requests import GetRequests, PostRequests
 
 
 class PageNotFound404:
