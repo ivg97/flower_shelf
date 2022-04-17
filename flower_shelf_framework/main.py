@@ -39,6 +39,7 @@ class Flower_shelf:
 
         url_path = environ['PATH_INFO']
 
+
         if url_path.startswith('/'):
             url_path = url_path.lstrip('/')
 
@@ -54,7 +55,7 @@ class Flower_shelf:
         if method == 'POST':
             data = PostRequests().get_request_params(environ)
             request['data'] = data
-            print(data)
+
         if method == 'GET':
             request_params = GetRequests().get_request_params(environ)
             request['request_params'] = request_params

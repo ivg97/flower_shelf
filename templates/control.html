@@ -10,20 +10,19 @@
 
             <div class="btn-group-vertical" role="group"
                  aria-label="Basic checkbox toggle button group">
+
+                <button><a href="/create_parameter/">Создать параметр</a>
+                </button>
+
+                {% for parameter in parameters %}
                 <input type="checkbox" class="btn-check" id="btncheck1"
                        autocomplete="off">
-                <label class="btn btn-outline-primary" for="btncheck1">Освещение
+                <label class="btn btn-outline-primary" for="btncheck1"><a
+                        href="/parameter/{{ parameter.id }}/">{{ parameter.name }}</a>
                 </label>
 
-                <input type="checkbox" class="btn-check" id="btncheck2"
-                       autocomplete="off">
-                <label class="btn btn-outline-primary" for="btncheck2">Увлажнение
-                </label>
+                {% endfor %}
 
-                <input type="checkbox" class="btn-check" id="btncheck3"
-                       autocomplete="off">
-                <label class="btn btn-outline-primary" for="btncheck3">Полив
-                </label>
 
             </div>
 
@@ -34,16 +33,19 @@
                 <h1 class="display-5">Управление</h1>
             </div>
 
+            <button><a href="/create_shelf/">Добавить полку</a>
+            </button>
+            <br>
+            <br>
+
 
             <div class="btn-group" role="group"
                  aria-label="Basic mixed styles example">
+                {% for shelf in shelfs %}
+                <button type="button" class="btn btn-success">{{ shelf.name }}
+                </button>
 
-                <button type="button" class="btn btn-danger">Полка 1</button>
-                <button type="button" class="btn btn-danger">Полка 2</button>
-                <button type="button" class="btn btn-success">Полка 3</button>
-                <button type="button" class="btn btn-success">Полка 4</button>
-                <button type="button" class="btn btn-success">Полка 5</button>
-                <button type="button" class="btn btn-success">Полка 6</button>
+                {% endfor %}
             </div>
 
 

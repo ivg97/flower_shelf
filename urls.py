@@ -1,4 +1,4 @@
-from views import Index, Monitoring, Control, Logs, Contacts
+from views import Index, Monitoring, Control, Logs, Contacts, NewParamater, NewShelf
 from flower_shelf_framework.settings import MICROCONTROLLER, COM_PORT
 
 
@@ -13,7 +13,7 @@ def com_port(request):
 
 
 
-fronts = [key, microcontroller]
+fronts = [key, microcontroller, com_port]
 
 routers = {
     '/': Index(),
@@ -21,4 +21,6 @@ routers = {
     'control/': Control(),
     'logs/': Logs(),
     'contacts/': Contacts(),
+    'create_parameter/': NewParamater(),
+    'create_shelf/': NewShelf(),
 }
