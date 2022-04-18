@@ -15,12 +15,12 @@ def com_port(request):
 
 fronts = [key, microcontroller, com_port]
 
-routers = {
-    '/': Index(),
-    'monitoring/': Monitoring(),
-    'control/': Control(),
-    'logs/': Logs(),
-    'contacts/': Contacts(),
-    'create_parameter/': NewParamater(),
-    'create_shelf/': NewShelf(),
-}
+# routers = {
+#     '/': Index(),
+#     'monitoring/': Monitoring(),
+#     'control/': Control(),
+#     'logs/': Logs(),
+#     'contacts/': Contacts(),
+#     'create_parameter/': NewParamater(),
+#     'create_shelf/': NewShelf(),
+# }
