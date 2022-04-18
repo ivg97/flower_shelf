@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <div>
+                <h1 class="display-5"></h1>
+            </div>
+
+        </div>
+        <div class="col-6">
+            <div>
+                <h1 class="display-5">Создание параметра</h1>
+
+                <form method="post">
+                    <input type="text" name="name" placeholder="Название">
+                    <button type="submit">Сохранить</button>
+                </form>
+                <br>
+                <button><a href="/control/">Назад</a></button>
+                <button><a href="/">На главную</a></button>
+
+                <div class="col-3">
+                    <div>
+                        <h1 class="display-5"></h1>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
