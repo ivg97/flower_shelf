@@ -1,24 +1,33 @@
 import copy
 import quopri
 
+from patterns.logs import Log
+
 
 class User:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, username, **kwargs):
+        self.username = username
+        print(kwargs)
+
+        self.last_name = kwargs['last_name']
+        self.first_name = kwargs['first_name']
+        self.email = kwargs['email']
+        self.status = kwargs['status']
+
 
 
 
 class Admin(User):
-    def __init__(self, name):
-        super().__init__(name)
-        Engine().admin.append(name)
+    def __init__(self, username, **kwargs):
+        super().__init__(username, **kwargs)
+
 
 
 
 class Guest(User):
-    def __init__(self, name):
-        super().__init__(name)
-        Engine().guest.append(name)
+    def __init__(self, username, **kwargs):
+        super().__init__(username, **kwargs)
+
 
 
 class UserFactory:
@@ -28,8 +37,8 @@ class UserFactory:
     }
 
     @classmethod
-    def create(cls, type_, name):
-        return cls.types[type_](name)
+    def create(cls, type_, username, **kwargs):
+        return cls.types[type_](username, **kwargs)
 
 
 class ControlPrototype:
@@ -89,14 +98,17 @@ class Shelf:
 
 class Engine:
     def __init__(self):
+        self.logs = []
         self.admin = []
         self.guest = []
         self.shelfs = []
         self.parameters = []
 
     @staticmethod
-    def create_user(type_, name):
-        return UserFactory.create(type_, name)
+    def create_user(type_, username, **kwargs):
+        return UserFactory.create(type_, username, **kwargs)
+
+
 
 
     def create_parameter(self, name):
@@ -121,6 +133,14 @@ class Engine:
     @staticmethod
     def get_parameter(name):
         return Parameter(name)
+
+
+    def get_users(self):
+        return self.admin + self.guest
+
+    @staticmethod
+    def create_log(log):
+        return Log(log)
 
 
 

@@ -1,3 +1,5 @@
+
+
 class SingletonByName(type):
 
     def __init__(cls, name, bases, attrs, **kwargs):
@@ -19,8 +21,9 @@ class SingletonByName(type):
 class Logger(metaclass=SingletonByName):
 
     def __init__(self, name):
-        self.namt = name
+        self.name = name
 
     @staticmethod
-    def log(text):
+    def log(text, lst):
         print(f'--- LOG ---: {text}')
+        lst.append(text)

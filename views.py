@@ -4,6 +4,7 @@ from flower_shelf_framework.templator import render
 from patterns.creational_patterns import Engine, decode_data, Parameter
 from patterns.logger import Logger
 from patterns.structural_patterns import AppRoute, Debug
+from patterns.behavioral_patterns import TemplateView, ListView, CreateView
 
 
 
@@ -39,6 +40,7 @@ class Index():
     '''
     @Debug(name='Index')
     def __call__(self, request):
+        logger.log(site.create_log('Click Index'), site.logs)
         return '200 OK', render('index.html')
 
 @AppRoute(routes=routers, url='monitoring/')
@@ -48,6 +50,7 @@ class Monitoring:
     '''
     @Debug(name='Monitoring')
     def __call__(self, request):
+        logger.log(site.create_log('Click Monitoring'), site.logs)
         return '200 OK', render('monitoring.html')
 
 @AppRoute(routes=routers, url='control/')
@@ -59,8 +62,10 @@ class Control:
     def __call__(self, request):
         method = request['method']
         if method == 'GET':
+            logger.log(site.create_log(f'Click Control - method {method}'), site.logs)
             print(method, request['request_params'])
         elif method == "POST":
+            logger.log(site.create_log(f'Click Control - method {method}'), site.logs)
             print(method, request['data'])
             data = decode_data(request['data'])
             print(data)
@@ -77,8 +82,8 @@ class Logs:
     '''
     @Debug(name='Logs')
     def __call__(self, request):
-        date = datetime.datetime.now().strftime('%d %B %Y %H:%M:%S')
-        return '200 OK', render('logs.html', date=date)
+        logger.log(site.create_log(f'Click Logs'), site.logs)
+        return '200 OK', render('logs.html', logs=site.logs[::-1])
 
 
 @AppRoute(routes=routers, url='contacts/')
@@ -88,6 +93,7 @@ class Contacts:
     '''
     @Debug(name='Contacts')
     def __call__(self, request):
+        logger.log(site.create_log(f'Click Contacts'), site.logs)
         method = request['method']
         if method == 'GET':
             print(method, request['request_params'])
@@ -102,7 +108,21 @@ class Admins:
     '''
     @Debug(name='Admins')
     def __call__(self, request):
+        logger.log(site.create_log(f'Click Admins'), site.logs)
         pass
+
+@AppRoute(routes=routers, url='users/')
+class ListUsers(ListView):
+    template_name = 'users_list.html'
+
+
+
+    def get_context_data(self):
+        logger.log(site.create_log(f'Click ListUsers'), site.logs)
+        context = super().get_context_data()
+        context['users'] = site.get_users()
+        return context
+
 
 
 @AppRoute(routes=routers, url='create_parameter/')
@@ -112,11 +132,13 @@ class NewParamater:
     '''
     @Debug(name='NewParameter')
     def __call__(self, request):
+        logger.log(site.create_log(f'Click NewParameter'), site.logs)
         method = request['method']
         if method == 'GET':
             pass
         elif method == 'POST':
             data = decode_data(request['data'])
+            logger.log(site.create_log(f'Click NewParameter - data: {data}'), site.logs)
             parameter = site.get_parameter(data['name'])
             site.create_parameter(parameter)
         return '200 OK', render('create_parameter.html')
@@ -129,12 +151,14 @@ class NewShelf:
     '''
     @Debug(name='NewShelf')
     def __call__(self, request):
+        logger.log(site.create_log(f'Click NewShelf'), site.logs)
         if site.parameters:
             method = request['method']
             if method == 'GET':
                 pass
             elif method == 'POST':
                 data = decode_data(request['data'])
+                logger.log(site.create_log(f'Click NewShelf - data: {data}'), site.logs)
                 shelf = site.get_shelf(data['name'])
                 param = [i for i in site.parameters if i.name == data['param']][0]
                 shelf = site.add_param_in_shelf(shelf, param)
@@ -144,3 +168,28 @@ class NewShelf:
                                     params=site.parameters)
         else:
             return '200 OK', render('create_shelf.html')
+
+
+@AppRoute(routes=routers, url='create_user/')
+class AddUser(CreateView):
+    template_name = 'create_user.html'
+
+    def create_object(self, data):
+
+        data = decode_data(data)
+        user = data['param']
+        username = data['username']
+        last_name = data['last_name']
+        first_name = data['first_name']
+        email = data['email']
+
+        new_user = site.create_user(user, username, last_name=last_name,
+                                    first_name=first_name, email=email,
+                                    status=user)
+
+        if user == 'admin':
+            site.admin.append(new_user)
+        elif user == 'guest':
+            site.guest.append(new_user)
+
+
