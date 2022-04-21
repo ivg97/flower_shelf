@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <div>
+                <h1 class="display-5"> </h1>
+            </div>
+
+        </div>
+        <div class="col-6">
+            <div>
+                <h1 class="display-5">Создание полки</h1>
+                {% if warning %}
+                <h1><kbd>{{ warning }}</kbd></h1>
+                {% endif %}
+
+           <form method="post">
+                <input type="text" name="name" placeholder="Название">
+               <br>
+               <br>
+               <p><select name="param">
+                   {% for param in params %}
+                   <option>{{ param.name }}</option>
+                   {% endfor %}
+               </select></p>
+               <br>
+                <button type="submit">Сохранить</button>
+            </form>
+                <br>
+                <button><a href="/control/">Назад</a></button>
+                <button><a href="/create_parameter/">Создать параметр</a></button>
+                <button><a href="/">На главную</a></button>
+
+            <div class="col-3">
+            <div>
+                <h1 class="display-5"> </h1>
+            </div>
+
+        </div>
+
+
+
+
+
+        </div>
+    </div>
+</div>
+    </div>
+{% endblock %}
