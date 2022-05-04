@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <div>
+                <h1 class="display-5"></h1>
+            </div>
+
+        </div>
+        <div class="col-6">
+            <div>
+                <h1 class="display-5">Все пользователи</h1>
+            </div>
+            <table class="table table-striped">
+                <tr>
+                    <td>id</td>
+                    <td>Пользователь</td>
+                    <td>Имя</td>
+                    <td>Фамилия</td>
+                    <td>email</td>
+                    <td>Статус</td>
+                </tr>
+                {% for user in users %}
+                <tr>
+                    <td>{{user.id}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.first_name}}</td>
+                    <td>{{user.last_name}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.status}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+<button><a href="/">На главную</a></button>
+
+
+
+            <div class="col-3">
+            <div>
+                <h1 class="display-5"> </h1>
+            </div>
+
+        </div>
+
+
+
+
+
+        </div>
+    </div>
+</div>
+    </div>
+{% endblock %}

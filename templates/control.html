@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <div>
+                <h1 class="display-5"> Параметры</h1>
+            </div>
+
+            <div class="btn-group-vertical" role="group"
+                 aria-label="Basic checkbox toggle button group">
+
+                <button><a href="/create_parameter/">Создать параметр</a>
+                </button>
+
+                {% for parameter in parameters %}
+                <input type="checkbox" class="btn-check" id="btncheck1"
+                       autocomplete="off">
+                <label class="btn btn-outline-primary" for="btncheck1"><a
+                        href="/parameter/{{ parameter.id }}/">{{ parameter.name }}</a>
+                </label>
+
+                {% endfor %}
+
+
+            </div>
+
+
+        </div>
+        <div class="col-9">
+            <div>
+                <h1 class="display-5">Управление</h1>
+            </div>
+
+            <button><a href="/create_shelf/">Добавить полку</a>
+            </button>
+            <br>
+            <br>
+
+
+            <div class="btn-group" role="group"
+                 aria-label="Basic mixed styles example">
+                {% for shelf in shelfs %}
+                <button type="button" class="btn btn-success">{{ shelf.name }}
+                </button>
+
+                {% endfor %}
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
