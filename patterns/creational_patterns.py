@@ -1,20 +1,31 @@
 import copy
 import quopri
 
+from flower_shelf_framework.db import declaration
+
 from patterns.logs import Log
 
 
-class User:
-    def __init__(self, username, **kwargs):
-        self.username = username
-        print(kwargs)
+session = declaration.session()
 
+
+class User:
+
+    def __init__(self, username, **kwargs):
+
+        self.username = username
         self.last_name = kwargs['last_name']
         self.first_name = kwargs['first_name']
         self.email = kwargs['email']
         self.status = kwargs['status']
 
-
+        new_user = declaration.UserTable(username=self.username,
+                                         first_name=self.first_name,
+                                         last_name=self.last_name,
+                                         email=self.email,
+                                         status=self.status)
+        session.add(new_user)
+        session.commit()
 
 
 class Admin(User):
@@ -22,12 +33,9 @@ class Admin(User):
         super().__init__(username, **kwargs)
 
 
-
-
 class Guest(User):
     def __init__(self, username, **kwargs):
         super().__init__(username, **kwargs)
-
 
 
 class UserFactory:
@@ -62,8 +70,10 @@ class LightingControl(ControlSettings):
 class WateringControl(ControlSettings):
     pass
 
+
 class HumidificationControl(ControlSettings):
     pass
+
 
 class ControlFactory:
     types = {
@@ -76,27 +86,31 @@ class ControlFactory:
     def create(cls, type_, shelf, parameter):
         return cls.types[type_](shelf, parameter)
 
+
 class Parameter:
 
-    auto_id = 1
-
     def __init__(self, name):
-        self.id = Parameter.auto_id
-        Parameter.auto_id += 1
         self.name = name
         self.shelf = []
 
+        new_param = declaration.ParamTable(name=self.name)
+        session.add(new_param)
+        session.commit()
+
+
 class Shelf:
 
-    auto_id = 1
-
     def __init__(self, name, parameter=None):
-        self.id = Parameter.auto_id
-        Parameter.auto_id += 1
         self.parameter = parameter
         self.name = name
 
+        new_shelf = declaration.ShelfTable(name=self.name)
+        session.add(new_shelf)
+        session.commit()
+
+
 class Engine:
+
     def __init__(self):
         self.logs = []
         self.admin = []
@@ -108,39 +122,31 @@ class Engine:
     def create_user(type_, username, **kwargs):
         return UserFactory.create(type_, username, **kwargs)
 
-
-
-
-    def create_parameter(self, name):
-        self.parameters.append(name)
-
-
-    def create_shelf(self, shelf, parameter):
-        self.shelfs.append(shelf)
-        if parameter != None:
-            parameter.shelf.append(shelf)
-
     @staticmethod
-    def get_shelf(name):
-        return Shelf(name)
-
-    @staticmethod
-    def add_param_in_shelf(shelf, param):
-        shelf.parameter = param
-        return shelf
-
-
-    @staticmethod
-    def get_parameter(name):
+    def create_parameter(name):
         return Parameter(name)
 
+    @staticmethod
+    def create_shelf(name):
+        return Shelf(name)
 
-    def get_users(self):
-        return self.admin + self.guest
+    def all_users(self):
+        return session.query(declaration.UserTable)
+
+    @staticmethod
+    def all_param():
+        return session.query(declaration.ParamTable)
+
+    def all_shelf(self):
+        return session.query(declaration.ShelfTable)
 
     @staticmethod
     def create_log(log):
         return Log(log)
+
+    def start_db(self):
+        declaration.main()
+
 
 
 

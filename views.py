@@ -9,23 +9,25 @@ from patterns.behavioral_patterns import TemplateView, ListView, CreateView
 
 
 site = Engine()
-param_1 = site.get_parameter('Полив')
-site.create_parameter(param_1)
+site.start_db()
+# param_1 = site.get_parameter('Полив')
+# site.create_parameter(param_1)
+#
+# param_2 = site.get_parameter('Увлажнение')
+# site.create_parameter(param_2)
+#
+# shelf_1 = site.get_shelf('Роза')
+#
+# site.create_shelf(shelf_1)
+#
+# shelf_2 = site.get_shelf('Гвоздика')
+#
+# site.create_shelf(shelf_2)
+#
+# shelf_3 = site.get_shelf('Фиалка')
+#
+# site.create_shelf(shelf_3)
 
-param_2 = site.get_parameter('Увлажнение')
-site.create_parameter(param_2)
-
-shelf_1 = site.get_shelf('Роза')
-site.add_param_in_shelf(shelf_1, param_1)
-site.create_shelf(shelf_1, param_1)
-
-shelf_2 = site.get_shelf('Гвоздика')
-site.add_param_in_shelf(shelf_2, param_2)
-site.create_shelf(shelf_2, param_2)
-
-shelf_3 = site.get_shelf('Фиалка')
-site.add_param_in_shelf(shelf_3, param_1)
-site.create_shelf(shelf_3, param_1)
 
 
 logger = Logger('main')
@@ -68,11 +70,11 @@ class Control:
             logger.log(site.create_log(f'Click Control - method {method}'), site.logs)
             print(method, request['data'])
             data = decode_data(request['data'])
-            print(data)
-            site.parameters.append(data['name'])
+            param = site.get_parameter(data['name'])
+            site.create_parameter(param)
         return '200 OK', render('control.html',
                 model_microcontroller=request.get('microcontroller', None),
-                                parameters=site.parameters, shelfs=site.shelfs)
+                                parameters=site.all_param(), shelfs=site.all_shelf())
 
 @AppRoute(routes=routers, url='logs/')
 class Logs:
@@ -115,12 +117,10 @@ class Admins:
 class ListUsers(ListView):
     template_name = 'users_list.html'
 
-
-
     def get_context_data(self):
         logger.log(site.create_log(f'Click ListUsers'), site.logs)
         context = super().get_context_data()
-        context['users'] = site.get_users()
+        context['users'] = site.all_users()
         return context
 
 
@@ -139,8 +139,8 @@ class NewParamater:
         elif method == 'POST':
             data = decode_data(request['data'])
             logger.log(site.create_log(f'Click NewParameter - data: {data}'), site.logs)
-            parameter = site.get_parameter(data['name'])
-            site.create_parameter(parameter)
+            print(data['name'])
+            site.create_parameter(data['name'])
         return '200 OK', render('create_parameter.html')
 
 
@@ -152,20 +152,18 @@ class NewShelf:
     @Debug(name='NewShelf')
     def __call__(self, request):
         logger.log(site.create_log(f'Click NewShelf'), site.logs)
-        if site.parameters:
+        if site.all_param():
             method = request['method']
             if method == 'GET':
                 pass
             elif method == 'POST':
                 data = decode_data(request['data'])
                 logger.log(site.create_log(f'Click NewShelf - data: {data}'), site.logs)
-                shelf = site.get_shelf(data['name'])
-                param = [i for i in site.parameters if i.name == data['param']][0]
-                shelf = site.add_param_in_shelf(shelf, param)
-                site.create_shelf(shelf, param)
+                name = data['name']
+                site.create_shelf(name)
 
             return '200 OK', render('create_shelf.html',
-                                    params=site.parameters)
+                                    params=site.all_param())
         else:
             return '200 OK', render('create_shelf.html')
 
@@ -183,13 +181,10 @@ class AddUser(CreateView):
         first_name = data['first_name']
         email = data['email']
 
-        new_user = site.create_user(user, username, last_name=last_name,
+        site.create_user(user, username, last_name=last_name,
                                     first_name=first_name, email=email,
                                     status=user)
 
-        if user == 'admin':
-            site.admin.append(new_user)
-        elif user == 'guest':
-            site.guest.append(new_user)
+
 
 
